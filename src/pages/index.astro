@@ -8,11 +8,19 @@
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
-		<title>Tailwind + Astro!</title>
+		<title>Tailwind + Astro + HTMX!</title>
 	</head>
-	<body class="grid place-items-center h-screen content-center bg-base-100">
+	<body class="grid gap-4 place-items-center h-screen content-center bg-base-100">
 	<h1 class="prose text-base-content">
-		tailwind + astro!
+		tailwind + astro + htmx!
 	</h1>
+	<button class="btn btn-primary"
+			hx-post="/partial"
+			hx-trigger="click"
+			hx-target="#partial-result"
+			hx-swap="innerHTML">
+		Are htmx partials working?
+	</button>
+	<h2 class="prose text-base-content" id="partial-result"></h2>
 	</body>
 </html>
