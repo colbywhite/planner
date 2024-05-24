@@ -14,7 +14,7 @@
 	<h1 class="prose text-base-content">
 		tailwind + astro + htmx!
 	</h1>
-	<button class="btn btn-primary"
+	<button class="btn btn-secondary"
 			hx-post="/partial"
 			hx-trigger="click"
 			hx-target="#partial-result"
@@ -22,5 +22,14 @@
 		Are htmx partials working?
 	</button>
 	<h2 class="prose text-base-content" id="partial-result"></h2>
+	<div x-data="{ open: false }" class="grid gap-4 place-items-center content-center">
+		<button class="btn btn-secondary" @click="open = true">
+			Is alpinejs working?
+		</button>
+
+		<h2 class="prose text-base-content" x-show="open">
+			alpinejs is working!
+		</h2>
+	</div>
 	</body>
 </html>
