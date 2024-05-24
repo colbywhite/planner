@@ -1,35 +1,79 @@
 ---
-
+const data = [
+    {
+        start: new Date('2024-06-01'),
+        end: new Date('2024-06-07'),
+        tasks: [
+            'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
+            'Proin ornare nulla at fermentum tincidunt',
+            'Curabitur tempor turpis vitae dolor cursus, nec condimentum odio sagittis',
+            'Vivamus eget ligula eget quam convallis iaculis sed non sapien',
+            'Ut consectetur velit consequat purus pretium, eget condimentum nulla dapibus',
+            'Aliquam vel sem sed ligula tincidunt scelerisque ac ac nisi',
+        ]
+    },
+    {
+        start: new Date('2024-06-08'),
+        end: new Date('2024-06-14'),
+        tasks: [
+            'Praesent sagittis risus et nunc ornare, eu vehicula massa tincidunt',
+            'Aliquam fringilla massa ac leo eleifend interdum',
+            'Maecenas vel lorem luctus, interdum nisl a, auctor quam',
+            'Pellentesque bibendum magna nec turpis posuere tincidunt',
+        ]
+    },
+    {
+        start: new Date('2024-06-15'),
+        end: new Date('2024-06-21'),
+        tasks: [
+            'Nunc feugiat nisl nec turpis tristique, id tincidunt sem venenatis',
+            'Nam molestie justo in posuere laoreet',
+        ]
+    }
+]
+const requestedWeekIndex = Number(Astro.url.searchParams.get('week') || '1') - 1;
+const lastWeekIndex = data.length - 1;
+const currentWeekIndex = Math.max(0, Math.min(requestedWeekIndex, lastWeekIndex))
+const prevWeekHref = currentWeekIndex - 1 >= 0 ? '?week=' + (currentWeekIndex) : undefined;
+const nextWeekHref = currentWeekIndex + 1 <= lastWeekIndex ? '?week=' + (currentWeekIndex + 2) : undefined;
+const paginationClasses = "grid gap-2 " + (prevWeekHref && nextWeekHref ? 'grid-cols-2' : 'grid-cols-1')
+const week = data[currentWeekIndex]
 ---
 
 <html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Tailwind + Astro + HTMX!</title>
-	</head>
-	<body class="grid gap-4 place-items-center h-screen content-center bg-base-100">
-	<h1 class="prose text-base-content">
-		tailwind + astro + htmx!
-	</h1>
-	<button class="btn btn-secondary"
-			hx-post="/partial"
-			hx-trigger="click"
-			hx-target="#partial-result"
-			hx-swap="innerHTML">
-		Are htmx partials working?
-	</button>
-	<h2 class="prose text-base-content" id="partial-result"></h2>
-	<div x-data="{ open: false }" class="grid gap-4 place-items-center content-center">
-		<button class="btn btn-secondary" @click="open = true">
-			Is alpinejs working?
-		</button>
-
-		<h2 class="prose text-base-content" x-show="open">
-			alpinejs is working!
-		</h2>
-	</div>
-	</body>
+<head>
+    <meta charset="utf-8"/>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
+    <meta name="viewport" content="width=device-width"/>
+    <meta name="generator" content={Astro.generator}/>
+    <title>Planner</title>
+</head>
+<body class="h-screen bg-base-100 m-4">
+<main class="flex flex-col gap-4 items-center">
+    <h1 class="text-3xl text-base-content">
+        Planner
+    </h1>
+    <section class="card min-h-96 bg-accent text-accent-content shadow-xl">
+        <div class="card-body">
+            <h2 class="card-title text-accent-content">
+                {week.start.toDateString()}
+                -
+                {week.end.toDateString()}
+            </h2>
+            <ul class="list-disc">
+                {week.tasks.map(t =>
+                        <li>{t}</li>)}
+            </ul>
+        </div>
+    </section>
+    <div class={paginationClasses}>
+        {prevWeekHref && (
+                <a role="button" href={prevWeekHref} class="btn btn-neutral">Previous</a>
+        )}
+        {nextWeekHref && (
+                <a role="button" href={nextWeekHref} class="btn btn-neutral">Next</a>
+        )}
+    </div>
+</main>
+</body>
 </html>
