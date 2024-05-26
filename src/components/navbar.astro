@@ -1,0 +1,28 @@
+---
+const {avatarUrl, name} = Astro.props
+---
+
+<div class="navbar bg-base-100">
+    <div class="navbar-start">
+        <a href="/" class="btn btn-ghost text-xl">Planner</a>
+    </div>
+    <div class="navbar-end">
+        {name
+            ?
+                <div class="dropdown dropdown-end">
+                    <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                        <div class="w-10 rounded-full">
+                            <img src={avatarUrl} alt={name}/>
+                        </div>
+                    </div>
+                    <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 w-28">
+                        <li>
+                            <a href="/auth/logout" class="btn btn-link">Log out</a>
+                        </li>
+                    </ul>
+                </div>
+            :
+                <a href="/auth/login" class="btn btn-secondary">Log in</a>
+        }
+    </div>
+</div>

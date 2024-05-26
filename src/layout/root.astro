@@ -1,7 +1,11 @@
 ---
-import { ViewTransitions } from 'astro:transitions';
-const { title: givenTitle } = Astro.props;
+import {ViewTransitions} from 'astro:transitions';
+import {supabase} from "../services/supabase.service";
+import NavBar from "../components/navbar.astro";
+const {title: givenTitle} = Astro.props;
 const title = givenTitle || 'Planner'
+
+const {data: {user}} = await supabase.auth.getUser()
 ---
 
 <html lang="en">
@@ -10,10 +14,11 @@ const title = givenTitle || 'Planner'
     <link rel="icon" type="image/svg+xml" href="/favicon.svg"/>
     <meta name="viewport" content="width=device-width"/>
     <meta name="generator" content={Astro.generator}/>
-    <ViewTransitions />
+    <ViewTransitions/>
     <title>{title}</title>
 </head>
 <body class="h-screen bg-base-100 m-4">
-<slot />
+<NavBar avatarUrl={user?.user_metadata?.avatar_url} name={user?.user_metadata?.full_name} />
+<slot/>
 </body>
 </html>
