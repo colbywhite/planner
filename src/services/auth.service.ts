@@ -1,7 +1,7 @@
-import {supabase} from "./supabase.service.ts";
+import {createSupabaseClient} from "./supabase.service";
 
-export async function signInWithGithub(origin: string) {
-    const {data, error} = await supabase.auth.signInWithOAuth({
+export async function signInWithGithub(client: ReturnType<typeof createSupabaseClient>, origin: string) {
+    const {data, error} = await client.auth.signInWithOAuth({
         provider: 'github',
         options: {
             redirectTo: new URL('/auth/callback', origin).toString(),
@@ -10,6 +10,6 @@ export async function signInWithGithub(origin: string) {
     return data.url
 }
 
-export async function signOut() {
-    const {error} = await supabase.auth.signOut()
+export async function signOut(client: ReturnType<typeof createSupabaseClient>) {
+    const {error} = await client.auth.signOut()
 }
