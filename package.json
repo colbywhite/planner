@@ -3,12 +3,12 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
-    "dev": "astro dev",
+    "dev": "supabase start && astro dev",
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "types": "supabase gen types typescript --project-id abcdefghijklmnopqrst > database.types.ts"
+    "types": "supabase gen types typescript --local > src/services/database.types.ts"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.0",
@@ -26,5 +26,8 @@
     "htmx.org": "^1.9.12",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.5"
+  },
+  "devDependencies": {
+    "supabase": "^1.167.4"
   }
 }
