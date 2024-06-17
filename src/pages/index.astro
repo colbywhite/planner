@@ -32,35 +32,35 @@ const data = [
         ]
     }
 ]
-const requestedWeekIndex = Number(Astro.url.searchParams.get('week') || '1') - 1;
-const lastWeekIndex = data.length - 1;
-const currentWeekIndex = Math.max(0, Math.min(requestedWeekIndex, lastWeekIndex))
-const prevWeekHref = currentWeekIndex - 1 >= 0 ? '?week=' + (currentWeekIndex) : undefined;
-const nextWeekHref = currentWeekIndex + 1 <= lastWeekIndex ? '?week=' + (currentWeekIndex + 2) : undefined;
-const paginationClasses = "grid gap-2 " + (prevWeekHref && nextWeekHref ? 'grid-cols-2' : 'grid-cols-1')
-const week = data[currentWeekIndex]
+const requestedBlockIndex = Number(Astro.url.searchParams.get('block') || '1') - 1;
+const lastBlockIndex = data.length - 1;
+const currentBlockIndex = Math.max(0, Math.min(requestedBlockIndex, lastBlockIndex))
+const prevBlockHref = currentBlockIndex - 1 >= 0 ? '?block=' + (currentBlockIndex) : undefined;
+const nextBlockHref = currentBlockIndex + 1 <= lastBlockIndex ? '?block=' + (currentBlockIndex + 2) : undefined;
+const paginationClasses = "grid gap-2 " + (prevBlockHref && nextBlockHref ? 'grid-cols-2' : 'grid-cols-1')
+const block = data[currentBlockIndex]
 ---
 <Root>
     <main class="flex flex-col gap-4 items-center">
         <section class="card min-h-96 bg-accent text-accent-content shadow-xl">
             <div class="card-body">
                 <h2 class="card-title text-accent-content">
-                    {week.start.toDateString()}
+                    {block.start.toDateString()}
                     -
-                    {week.end.toDateString()}
+                    {block.end.toDateString()}
                 </h2>
                 <ul class="list-disc">
-                    {week.tasks.map(t =>
+                    {block.tasks.map(t =>
                             <li>{t}</li>)}
                 </ul>
             </div>
         </section>
         <div class={paginationClasses}>
-            {prevWeekHref && (
-                    <a role="button" href={prevWeekHref} class="btn btn-neutral">Previous</a>
+            {prevBlockHref && (
+                    <a role="button" href={prevBlockHref} class="btn btn-neutral">Previous</a>
             )}
-            {nextWeekHref && (
-                    <a role="button" href={nextWeekHref} class="btn btn-neutral">Next</a>
+            {nextBlockHref && (
+                    <a role="button" href={nextBlockHref} class="btn btn-neutral">Next</a>
             )}
         </div>
     </main>

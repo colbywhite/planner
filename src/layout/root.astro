@@ -20,6 +20,6 @@ const {data: {user}} = await client.auth.getUser()
 </head>
 <body class="h-screen bg-base-100 m-4">
 <NavBar avatarUrl={user?.user_metadata?.avatar_url} name={user?.user_metadata?.full_name} />
-<slot/>
+<slot />
 </body>
 </html>

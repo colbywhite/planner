@@ -1,6 +1,6 @@
 import type {APIRoute} from "astro";
 import {signInWithGithub} from "../../services/auth.service";
-import {createSupabaseClient} from "../../services/supabase.service.ts";
+import {createSupabaseClient} from "../../services/supabase.service";
 
 export const GET: APIRoute = async ({request, cookies, redirect}) => {
     const client = createSupabaseClient(cookies)
