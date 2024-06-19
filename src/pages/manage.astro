@@ -1,0 +1,21 @@
+---
+import Root from "../../layout/root.astro";
+import CreateBlockForm from "../../components/create-block-form.astro";
+
+import {BlockService} from "../../services/block.service";
+
+if (Astro.request.method === "POST") {
+    const data = await Astro.request.formData();
+    const start = data.get("start");
+    const end = data.get("end");
+    const title = data.get("title");
+    await new BlockService(Astro.cookies).createBlock({start, end, subtitle: title})
+    return Astro.redirect('/')
+}
+---
+
+<Root>
+    <main class="grid grid-cols-1 items-center max-w-screen-sm mx-auto p-4">
+        <CreateBlockForm method="post" action={Astro.request.url} />
+    </main>
+</Root>

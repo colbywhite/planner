@@ -1,66 +1,32 @@
 ---
 import Root from "../layout/root.astro";
-const data = [
-    {
-        start: new Date('2024-06-01'),
-        end: new Date('2024-06-07'),
-        tasks: [
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit',
-            'Proin ornare nulla at fermentum tincidunt',
-            'Curabitur tempor turpis vitae dolor cursus, nec condimentum odio sagittis',
-            'Vivamus eget ligula eget quam convallis iaculis sed non sapien',
-            'Ut consectetur velit consequat purus pretium, eget condimentum nulla dapibus',
-            'Aliquam vel sem sed ligula tincidunt scelerisque ac ac nisi',
-        ]
-    },
-    {
-        start: new Date('2024-06-08'),
-        end: new Date('2024-06-14'),
-        tasks: [
-            'Praesent sagittis risus et nunc ornare, eu vehicula massa tincidunt',
-            'Aliquam fringilla massa ac leo eleifend interdum',
-            'Maecenas vel lorem luctus, interdum nisl a, auctor quam',
-            'Pellentesque bibendum magna nec turpis posuere tincidunt',
-        ]
-    },
-    {
-        start: new Date('2024-06-15'),
-        end: new Date('2024-06-21'),
-        tasks: [
-            'Nunc feugiat nisl nec turpis tristique, id tincidunt sem venenatis',
-            'Nam molestie justo in posuere laoreet',
-        ]
-    }
-]
+import {BlockService} from "../services/block.service";
+
 const requestedBlockIndex = Number(Astro.url.searchParams.get('block') || '1') - 1;
-const lastBlockIndex = data.length - 1;
-const currentBlockIndex = Math.max(0, Math.min(requestedBlockIndex, lastBlockIndex))
-const prevBlockHref = currentBlockIndex - 1 >= 0 ? '?block=' + (currentBlockIndex) : undefined;
-const nextBlockHref = currentBlockIndex + 1 <= lastBlockIndex ? '?block=' + (currentBlockIndex + 2) : undefined;
-const paginationClasses = "grid gap-2 " + (prevBlockHref && nextBlockHref ? 'grid-cols-2' : 'grid-cols-1')
-const block = data[currentBlockIndex]
+const {block, previousIndex, nextIndex} = await new BlockService(Astro.cookies).getBlock(requestedBlockIndex)
+const prevBlockHref = previousIndex!==undefined ? `?block=${previousIndex + 1}` : undefined;
+const nextBlockHref = nextIndex!==undefined ? `?block=${nextIndex + 1}` : undefined;
 ---
 <Root>
-    <main class="flex flex-col gap-4 items-center">
+    <main class="grid grid-cols-1 items-center max-w-screen-sm mx-auto p-4">
         <section class="card min-h-96 bg-accent text-accent-content shadow-xl">
             <div class="card-body">
                 <h2 class="card-title text-accent-content">
-                    {block.start.toDateString()}
+                    {block.start}
                     -
-                    {block.end.toDateString()}
+                    {block.end}
                 </h2>
                 <ul class="list-disc">
-                    {block.tasks.map(t =>
-                            <li>{t}</li>)}
+                    <li>TODO</li>
                 </ul>
             </div>
         </section>
-        <div class={paginationClasses}>
+        <div class="grid gap-2 grid-cols-2">
             {prevBlockHref && (
-                    <a role="button" href={prevBlockHref} class="btn btn-neutral">Previous</a>
+                    <a role="button" href={prevBlockHref} class="btn btn-neutral col-start-1">Previous</a>
             )}
             {nextBlockHref && (
-                    <a role="button" href={nextBlockHref} class="btn btn-neutral">Next</a>
+                    <a role="button" href={nextBlockHref} class="btn btn-neutral col-start-2">Next</a>
             )}
         </div>
     </main>

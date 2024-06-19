@@ -1,0 +1,25 @@
+---
+const {method, action} = Astro.props
+---
+<form class="flex flex-col gap-4" method={method} action={action}>
+    <p>Create a block</p>
+    <label class="form-control w-full max-w-xs">
+        <div class="label">
+            <span class="label-text">Start date</span>
+        </div>
+        <input type="date" name="start" required class="input input-bordered input-sm w-full max-w-xs"/>
+    </label>
+    <label class="form-control w-full max-w-xs">
+        <div class="label">
+            <span class="label-text">End date</span>
+        </div>
+        <input type="date" name="end" required class="input input-bordered input-sm w-full max-w-xs"/>
+    </label>
+    <label class="form-control w-full max-w-xs">
+        <div class="label">
+            <span class="label-text">Title</span>
+        </div>
+        <input type="text" name="title" class="input input-bordered input-sm w-full max-w-xs"/>
+    </label>
+    <button type="submit" class="btn btn-primary">Create block</button>
+</form>

@@ -18,7 +18,7 @@ const {data: {user}} = await client.auth.getUser()
     <ViewTransitions/>
     <title>{title}</title>
 </head>
-<body class="h-screen bg-base-100 m-4">
+<body class="h-screen bg-base-100 m-4 antialiased ">
 <NavBar avatarUrl={user?.user_metadata?.avatar_url} name={user?.user_metadata?.full_name} />
 <slot />
 </body>
