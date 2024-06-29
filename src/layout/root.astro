@@ -1,12 +1,10 @@
 ---
 import {ViewTransitions} from 'astro:transitions';
-import {createSupabaseClient} from "../services/supabase.service";
 import NavBar from "../components/navbar.astro";
 const {title: givenTitle} = Astro.props;
 const title = givenTitle || 'Planner'
 
-const client = createSupabaseClient(Astro.cookies)
-const {data: {user}} = await client.auth.getUser()
+const {user} = Astro.locals
 ---
 
 <html lang="en">
