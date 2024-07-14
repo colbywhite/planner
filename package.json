@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "supabase start && astro dev",
     "start": "astro dev",
-    "build": "astro check && astro build",
+    "check": "astro check --minimumSeverity error",
+    "build": "astro check --minimumSeverity error && astro build",
     "preview": "astro preview",
     "astro": "astro",
     "types": "supabase gen types typescript --local > src/services/database.types.ts"

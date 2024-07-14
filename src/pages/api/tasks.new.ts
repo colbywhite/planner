@@ -10,6 +10,9 @@ export const POST: APIRoute = async ({request, cookies, redirect}) => {
     const emoji = parseStringFromFormData(formData, 'emoji')
     const name = parseStringFromFormData(formData, 'name')
     const block_id = parseStringFromFormData(formData, 'block_id')
+    if (emoji === undefined || name === undefined || block_id === undefined) {
+        throw new Error('Bad input')
+    }
     const input = {emoji, name, block_id}
     await new BlockService(cookies).createTask(input)
     return redirect(redirectPath)
