@@ -34,7 +34,7 @@ export type Database = {
   }
   public: {
     Tables: {
-      Block: {
+      blocks: {
         Row: {
           created_at: string
           end: string
@@ -44,9 +44,9 @@ export type Database = {
           subtitle: string | null
         }
         Insert: {
-          created_at: string
+          created_at?: string
           end: string
-          id: string
+          id?: string
           owner: string
           start: string
           subtitle?: string | null
@@ -61,7 +61,7 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "Block_owner_fkey"
+            foreignKeyName: "blocks_owner_fkey"
             columns: ["owner"]
             isOneToOne: false
             referencedRelation: "users"
@@ -69,61 +69,25 @@ export type Database = {
           },
         ]
       }
-      Task: {
+      tasks: {
         Row: {
+          block_id: string
           created_at: string
+          emoji: string
           id: string
           name: string
           owner: string
-          type: string
         }
         Insert: {
-          created_at: string
-          id: string
-          name: string
-          owner: string
-          type: string
-        }
-        Update: {
+          block_id: string
           created_at?: string
+          emoji: string
           id?: string
-          name?: string
-          owner?: string
-          type?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Task_owner_fkey"
-            columns: ["owner"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "Task_type_fkey"
-            columns: ["type"]
-            isOneToOne: false
-            referencedRelation: "Task Type"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      "Task Type": {
-        Row: {
-          created_at: string
-          emoji: string
-          id: string
-          name: string
-          owner: string
-        }
-        Insert: {
-          created_at: string
-          emoji: string
-          id: string
           name: string
           owner: string
         }
         Update: {
+          block_id?: string
           created_at?: string
           emoji?: string
           id?: string
@@ -132,46 +96,17 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "Task Type_owner_fkey"
+            foreignKeyName: "tasks_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "blocks"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "tasks_owner_fkey"
             columns: ["owner"]
             isOneToOne: false
             referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      "Tasks Per Block": {
-        Row: {
-          block: string
-          created_at: string
-          id: number
-          task: string
-        }
-        Insert: {
-          block: string
-          created_at: string
-          id?: number
-          task: string
-        }
-        Update: {
-          block?: string
-          created_at?: string
-          id?: number
-          task?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "Tasks Per Block_block_fkey"
-            columns: ["block"]
-            isOneToOne: false
-            referencedRelation: "Block"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "Tasks Per Block_task_fkey"
-            columns: ["task"]
-            isOneToOne: false
-            referencedRelation: "Task"
             referencedColumns: ["id"]
           },
         ]

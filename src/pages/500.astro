@@ -1,0 +1,13 @@
+---
+import Root from "../layout/root.astro";
+interface Props {
+    error: unknown
+}
+
+const {error} = Astro.props
+console.log(500, {error})
+---
+
+<Root gated={false}>
+    <div>{error instanceof Error ? error.message : 'Unknown error'}</div>
+</Root>
