@@ -9,7 +9,8 @@
     "build": "astro check --minimumSeverity error && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "types": "supabase gen types typescript --local > src/services/database.types.ts"
+    "types": "supabase gen types typescript --local > src/services/database.types.ts",
+    "prepare": "husky"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.0",
@@ -31,6 +32,8 @@
   },
   "devDependencies": {
     "@types/luxon": "^3.4.2",
+    "husky": "^9.0.11",
+    "pinst": "^3.0.0",
     "supabase": "^1.167.4"
   }
 }
