@@ -103,6 +103,13 @@ export type Database = {
             referencedColumns: ["id"]
           },
           {
+            foreignKeyName: "tasks_block_id_fkey"
+            columns: ["block_id"]
+            isOneToOne: false
+            referencedRelation: "numbered_blocks"
+            referencedColumns: ["block_id"]
+          },
+          {
             foreignKeyName: "tasks_owner_fkey"
             columns: ["owner"]
             isOneToOne: false
@@ -113,7 +120,27 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      numbered_blocks: {
+        Row: {
+          block_id: string | null
+          created_at: string | null
+          end: string | null
+          index: number | null
+          owner: string | null
+          start: string | null
+          subtitle: string | null
+          total: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blocks_owner_fkey"
+            columns: ["owner"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
       [_ in never]: never
@@ -401,6 +428,10 @@ export type Database = {
           metadata: Json
           updated_at: string
         }[]
+      }
+      operation: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       search: {
         Args: {

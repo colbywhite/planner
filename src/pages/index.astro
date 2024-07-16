@@ -4,10 +4,10 @@ import {BlockService} from "../services/block.service";
 import {calendarAddition, formatDate} from "../utils";
 import {DateTime} from "luxon";
 
-const requestedBlockIndex = Number(Astro.url.searchParams.get('block') || '1') - 1;
+const requestedBlockIndex = Number(Astro.url.searchParams.get('block') || '1');
 const {block, previousIndex, nextIndex} = await new BlockService(Astro.cookies).getBlockAndTasks(requestedBlockIndex)
-const prevBlockHref = previousIndex !== undefined ? `?block=${previousIndex + 1}` : undefined;
-const nextBlockHref = nextIndex !== undefined ? `?block=${nextIndex + 1}` : undefined;
+const prevBlockHref = previousIndex !== undefined ? `?block=${previousIndex}` : undefined;
+const nextBlockHref = nextIndex !== undefined ? `?block=${nextIndex}` : undefined;
 const newBlockDefaultDate = block ? calendarAddition(block.end, {days: 1}).toISODate() : DateTime.now().toISODate()
 ---
 <Root>
@@ -25,7 +25,7 @@ const newBlockDefaultDate = block ? calendarAddition(block.end, {days: 1}).toISO
                             <span class="italic" hx-swap="outerHTML" hx-include="input[name='block_id']" hx-get="/partials/tasks.new">
                                 Add task
                             </span>
-                            <input type="hidden" name="block_id" value={block.id}>
+                            <input type="hidden" name="block_id" value={block.block_id}>
                         </li>
                     </ul>
                     <div class="card-actions justify-between">
