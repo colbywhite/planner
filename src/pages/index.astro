@@ -31,10 +31,10 @@ const newBlockDefaultDate = block ? calendarAddition(block.end, {days: 1}).toISO
                     <div class="card-actions justify-between">
                         <div>
                             {prevBlockHref && (
-                                    <a href={prevBlockHref} class="btn btn-neutral">Previous</a>
+                                    <a data-astro-prefetch="viewport" href={prevBlockHref} class="btn btn-neutral">Previous</a>
                             )}
                             {nextBlockHref && (
-                                    <a href={nextBlockHref} class="btn btn-neutral">Next</a>
+                                    <a data-astro-prefetch="viewport" href={nextBlockHref} class="btn btn-neutral">Next</a>
                             )}
                         </div>
                     </div>
