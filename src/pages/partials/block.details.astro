@@ -1,0 +1,11 @@
+---
+export const partial = true
+
+import BlockDetails from "../../components/BlockDetails.astro";
+import {BlockService} from "../../services/block.service";
+
+const requestedBlockIndex = Number(Astro.url.searchParams.get('block') || '1');
+const {block, previousIndex, nextIndex} = await new BlockService(Astro.cookies).getBlockAndTasks(requestedBlockIndex)
+---
+
+<BlockDetails block={block} previous={previousIndex} next={nextIndex}/>

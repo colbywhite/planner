@@ -1,0 +1,53 @@
+---
+import type {BlockWithTasks} from "../services/block.service";
+import {formatDate} from "../utils";
+interface Props {
+    block: BlockWithTasks | undefined
+    previous: number | undefined
+    next: number | undefined
+}
+
+const {block, previous, next} = Astro.props
+---
+<h2 class="card-title text-accent-content justify-between">
+    {block ? `${formatDate(block.start)} - ${formatDate(block.end)}` : "No block found"}
+</h2>
+{block &&
+    <ul class="list-disc grow flex flex-col gap-2">
+        {
+            block.tasks.map(
+                ({emoji, name}) => <li>{emoji} {name}</li>
+            )
+        }
+        <li>
+            <span class="italic" hx-swap="outerHTML" hx-include="input[name='block_id']" hx-get="/partials/tasks.new">
+                Add task
+            </span>
+            <input type="hidden" name="block_id" value={block.block_id}>
+        </li>
+    </ul>
+}
+<div class="card-actions justify-between">
+    {previous && (
+            <form hx-get="/partials/block.details"
+                  x-init x-data="{disabled: false}"
+                  @htmx:before-request="disabled=true">
+                <input type="hidden" name="block" value={previous} />
+                <button type="submit" class="btn btn-neutral" :disabled="disabled">
+                    <span class="loading loading-spinner loading-xs" :class="{'hidden': !disabled}"></span>
+                    Previous
+                </button>
+            </form>
+    )}
+    {next && (
+            <form hx-get="/partials/block.details"
+                  x-init x-data="{disabled: false}"
+                  @htmx:before-request="disabled=true">
+                <input type="hidden" name="block" value={next} />
+                <button type="submit" class="btn btn-neutral" :disabled="disabled">
+                    Next
+                    <span class="loading loading-spinner loading-xs" :class="{'hidden': !disabled}"></span>
+                </button>
+            </form>
+    )}
+</div>
