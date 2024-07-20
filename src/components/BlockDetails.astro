@@ -33,8 +33,8 @@ const {block, previous, next} = Astro.props
                   x-init x-data="{disabled: false}"
                   @htmx:before-request="disabled=true">
                 <input type="hidden" name="block" value={previous} />
-                <button type="submit" class="btn btn-neutral" :disabled="disabled">
-                    <span class="loading loading-spinner loading-xs" :class="{'hidden': !disabled}"></span>
+                <button type="submit" class="btn btn-neutral disabled:text-neutral-content" :disabled="disabled">
+                    <span x-cloak class="loading loading-spinner loading-xs" x-show="disabled"></span>
                     Previous
                 </button>
             </form>
@@ -44,10 +44,16 @@ const {block, previous, next} = Astro.props
                   x-init x-data="{disabled: false}"
                   @htmx:before-request="disabled=true">
                 <input type="hidden" name="block" value={next} />
-                <button type="submit" class="btn btn-neutral" :disabled="disabled">
+                <button type="submit" class="btn btn-neutral disabled:text-neutral-content" :disabled="disabled">
                     Next
-                    <span class="loading loading-spinner loading-xs" :class="{'hidden': !disabled}"></span>
+                    <span x-cloak class="loading loading-spinner loading-xs" x-show="disabled"></span>
                 </button>
             </form>
     )}
 </div>
+
+<style>
+    [x-cloak] {
+        display: none !important;
+    }
+</style>
