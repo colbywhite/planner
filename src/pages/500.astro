@@ -8,6 +8,6 @@ const {error} = Astro.props
 console.log(500, {error})
 ---
 
-<Root gated={false}>
+<Root>
     <div>{error instanceof Error ? error.message : 'Unknown error'}</div>
 </Root>

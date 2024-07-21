@@ -1,7 +1,11 @@
 import {DateTime, type DurationLike} from "luxon";
 
-export function formatDate(date: string) {
+export function formatDateForTitle(date: string) {
     return DateTime.fromISO(date).toFormat('ccc, LLL d');
+}
+
+export function formatDateForSubtitle(date: string) {
+    return DateTime.fromISO(date).toFormat('LLL d');
 }
 
 export function calendarAddition(date: string, duration: DurationLike) {

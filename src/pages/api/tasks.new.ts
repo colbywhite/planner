@@ -1,6 +1,6 @@
 import type {APIRoute} from "astro";
-import {BlockService} from "../../services/block.service";
-import {parseStringFromFormData} from "../../utils.ts";
+import {parseStringFromFormData} from "../../utils";
+import {SeasonService} from "../../services/season.service";
 
 export const POST: APIRoute = async ({request, cookies, redirect}) => {
     const formData = await request.formData()
@@ -9,11 +9,10 @@ export const POST: APIRoute = async ({request, cookies, redirect}) => {
     // TODO: better validation
     const emoji = parseStringFromFormData(formData, 'emoji')
     const name = parseStringFromFormData(formData, 'name')
-    const block_id = parseStringFromFormData(formData, 'block_id')
-    if (emoji === undefined || name === undefined || block_id === undefined) {
+    const week_id = parseStringFromFormData(formData, 'week')
+    if (emoji === undefined || name === undefined || week_id === undefined) {
         throw new Error('Bad input')
     }
-    const input = {emoji, name, block_id}
-    await new BlockService(cookies).createTask(input)
+    await new SeasonService(cookies).addTasks({emoji, name, week_id})
     return redirect(redirectPath)
 }

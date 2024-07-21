@@ -1,21 +1,30 @@
 ---
 export const partial = true
-const block_id = Astro.url.searchParams.get('block_id')
+const week = Astro.url.searchParams.get('week')
 ---
 
-<form action="/api/tasks.new" method="post" class="flex flex-row gap-4 items-center">
-    <input type="hidden" name="block_id" value={block_id}/>
+<form action="/api/tasks.new" method="post" class="two-input-form-grid w-full gap-4">
+    <input type="hidden" name="week" value={week}/>
     <!--TODO: better emoji picker-->
-    <select name="emoji" aria-label="Emoji"
-            class="select select-bordered w-full max-w-xs bg-slate-300">
-        <option disabled selected>Emoji</option>
-        <option>🟠</option>
-        <option>🔵</option>
-        <option>🟡</option>
-        <option>🟢</option>
-        <option>🎓</option>
-    </select>
-    <input type="text" name="name" placeholder="Add task" aria-label="Task"
-           class="input input-bordered input-sm w-full max-w-xs bg-slate-300"/>
-    <button type="submit" class="btn btn-primary">Add task</button>
+    <label class="form-control two-input-form-grid-input-one">
+        <div class="label">
+            <span class="label-text">Emoji</span>
+        </div>
+        <select name="emoji" aria-label="Emoji"
+                class="select select-bordered">
+            <option>🟠</option>
+            <option>🔵</option>
+            <option>🟡</option>
+            <option>🟢</option>
+            <option>🎓</option>
+        </select>
+    </label>
+    <label class="form-control two-input-form-grid-input-two">
+        <div class="label">
+            <span class="label-text">Task name</span>
+        </div>
+        <input type="text" name="name" placeholder="Task name" aria-label="Task"
+               class="input input-bordered"/>
+    </label>
+    <button type="submit" class="btn btn-outline btn-primary two-input-form-grid-btn">Add task</button>
 </form>

@@ -1,8 +1,11 @@
 ---
+import '../base.css'
 import {ViewTransitions} from 'astro:transitions';
 import NavBar from "../components/navbar.astro";
-const {title: givenTitle} = Astro.props;
-const title = givenTitle || 'Planner'
+interface Props {
+    title?: string
+}
+const {title = 'Planner'} = Astro.props;
 
 const {user} = Astro.locals
 ---
@@ -16,8 +19,8 @@ const {user} = Astro.locals
     <ViewTransitions/>
     <title>{title}</title>
 </head>
-<body class="h-screen bg-base-100 m-4 antialiased ">
-<NavBar avatarUrl={user?.user_metadata?.avatar_url} name={user?.user_metadata?.full_name} />
+<body class="h-screen bg-base-100 m-4 antialiased w-96 mx-auto">
+<NavBar title={title} avatarUrl={user?.user_metadata?.avatar_url} name={user?.user_metadata?.full_name} />
 <slot />
 </body>
 </html>

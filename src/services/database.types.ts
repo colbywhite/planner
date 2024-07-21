@@ -34,34 +34,28 @@ export type Database = {
   }
   public: {
     Tables: {
-      blocks: {
+      seasons: {
         Row: {
           created_at: string
-          end: string
           id: string
+          name: string
           owner: string
-          start: string
-          subtitle: string | null
         }
         Insert: {
           created_at?: string
-          end: string
           id?: string
+          name: string
           owner: string
-          start: string
-          subtitle?: string | null
         }
         Update: {
           created_at?: string
-          end?: string
           id?: string
+          name?: string
           owner?: string
-          start?: string
-          subtitle?: string | null
         }
         Relationships: [
           {
-            foreignKeyName: "blocks_owner_fkey"
+            foreignKeyName: "seasons_owner_fkey"
             columns: ["owner"]
             isOneToOne: false
             referencedRelation: "users"
@@ -71,79 +65,109 @@ export type Database = {
       }
       tasks: {
         Row: {
-          block_id: string
           created_at: string
           emoji: string
           id: string
           name: string
-          owner: string
+          week_id: string
         }
         Insert: {
-          block_id: string
           created_at?: string
           emoji: string
           id?: string
           name: string
-          owner: string
+          week_id: string
         }
         Update: {
-          block_id?: string
           created_at?: string
           emoji?: string
           id?: string
           name?: string
-          owner?: string
+          week_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "tasks_block_id_fkey"
-            columns: ["block_id"]
+            foreignKeyName: "tasks_week_id_fkey"
+            columns: ["week_id"]
             isOneToOne: false
-            referencedRelation: "blocks"
+            referencedRelation: "numbered_weeks"
             referencedColumns: ["id"]
           },
           {
-            foreignKeyName: "tasks_block_id_fkey"
-            columns: ["block_id"]
+            foreignKeyName: "tasks_week_id_fkey"
+            columns: ["week_id"]
             isOneToOne: false
-            referencedRelation: "numbered_blocks"
-            referencedColumns: ["block_id"]
+            referencedRelation: "weeks"
+            referencedColumns: ["id"]
           },
+        ]
+      }
+      weeks: {
+        Row: {
+          created_at: string
+          end: string
+          id: string
+          season_id: string
+          start: string
+          subtitle: string | null
+        }
+        Insert: {
+          created_at?: string
+          end: string
+          id?: string
+          season_id: string
+          start: string
+          subtitle?: string | null
+        }
+        Update: {
+          created_at?: string
+          end?: string
+          id?: string
+          season_id?: string
+          start?: string
+          subtitle?: string | null
+        }
+        Relationships: [
           {
-            foreignKeyName: "tasks_owner_fkey"
-            columns: ["owner"]
+            foreignKeyName: "weeks_season_id_fkey"
+            columns: ["season_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "seasons"
             referencedColumns: ["id"]
           },
         ]
       }
     }
     Views: {
-      numbered_blocks: {
+      numbered_weeks: {
         Row: {
-          block_id: string | null
           created_at: string | null
           end: string | null
-          index: number | null
-          owner: string | null
+          id: string | null
+          number: number | null
+          season_id: string | null
           start: string | null
           subtitle: string | null
           total: number | null
         }
         Relationships: [
           {
-            foreignKeyName: "blocks_owner_fkey"
-            columns: ["owner"]
+            foreignKeyName: "weeks_season_id_fkey"
+            columns: ["season_id"]
             isOneToOne: false
-            referencedRelation: "users"
+            referencedRelation: "seasons"
             referencedColumns: ["id"]
           },
         ]
       }
     }
     Functions: {
-      [_ in never]: never
+      get_closest_week_id: {
+        Args: {
+          date: string
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

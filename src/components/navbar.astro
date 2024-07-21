@@ -1,10 +1,15 @@
 ---
-const {avatarUrl, name} = Astro.props
+interface Props {
+    avatarUrl: string
+    name: string
+    title?: string
+}
+const {avatarUrl, name, title = 'Planner'} = Astro.props
 ---
 
-<div class="navbar bg-base-100">
+<nav class="navbar bg-base-100">
     <div class="navbar-start">
-        <a data-astro-prefetch="false" href="/" class="btn btn-ghost text-xl">Planner</a>
+        <a data-astro-prefetch="false" href="/" class="btn btn-ghost btn-xs text-sm">{title}</a>
     </div>
     <div class="navbar-end">
         {name
@@ -17,7 +22,7 @@ const {avatarUrl, name} = Astro.props
                     </div>
                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 w-28">
                         <li>
-                            <a data-astro-prefetch="false" href="/auth/logout" class="btn btn-link">Log out</a>
+                            <a data-astro-prefetch="false" href="/auth/logout" class="btn btn-xs btn-link">Log out</a>
                         </li>
                     </ul>
                 </div>
@@ -25,4 +30,4 @@ const {avatarUrl, name} = Astro.props
                 <a data-astro-prefetch="false" href="/auth/login" class="btn btn-secondary">Log in</a>
         }
     </div>
-</div>
+</nav>
