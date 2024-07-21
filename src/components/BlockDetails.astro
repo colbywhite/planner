@@ -1,6 +1,7 @@
 ---
 import type {BlockWithTasks} from "../services/block.service";
 import {formatDate} from "../utils";
+import LoadingButton from "./LoadingButton.astro";
 interface Props {
     block: BlockWithTasks | undefined
     previous: number | undefined
@@ -29,31 +30,19 @@ const {block, previous, next} = Astro.props
 }
 <div class="card-actions justify-between">
     {previous && (
-            <form hx-get="/partials/block.details"
-                  x-init x-data="{disabled: false}"
-                  @htmx:before-request="disabled=true">
+            <form hx-get="/partials/block.details">
                 <input type="hidden" name="block" value={previous} />
-                <button type="submit" class="btn btn-neutral disabled:text-neutral-content" :disabled="disabled">
-                    <span x-cloak class="loading loading-spinner loading-xs" x-show="disabled"></span>
+                <LoadingButton type="submit" class="btn-neutral">
                     Previous
-                </button>
+                </LoadingButton>
             </form>
     )}
     {next && (
-            <form hx-get="/partials/block.details"
-                  x-init x-data="{disabled: false}"
-                  @htmx:before-request="disabled=true">
+            <form hx-get="/partials/block.details">
                 <input type="hidden" name="block" value={next} />
-                <button type="submit" class="btn btn-neutral disabled:text-neutral-content" :disabled="disabled">
+                <LoadingButton type="submit" loaderPosition="post" class="btn-neutral">
                     Next
-                    <span x-cloak class="loading loading-spinner loading-xs" x-show="disabled"></span>
-                </button>
+                </LoadingButton>
             </form>
     )}
 </div>
-
-<style>
-    [x-cloak] {
-        display: none !important;
-    }
-</style>
