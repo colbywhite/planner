@@ -48,14 +48,19 @@ const nextWeek = week.number + 1 > weeks.length ? undefined : week.number + 1
                 }
             </div>
         </header>
-        <ul class="list-disc list-inside grow flex flex-col gap-2">
-            {
-                tasks.map(
-                    ({emoji, name}) =>
-                            <li>{emoji} {name}</li>
-                )
-            }
-        </ul>
+        {tasks.length < 1 || tasks.every(t => t === null)
+            ?
+                <p>No tasks yet.</p>
+            :
+                <ul class="list-disc list-inside grow flex flex-col gap-2">
+                    {
+                        tasks.map(
+                            ({emoji, name}) =>
+                                    <li>{emoji} {name}</li>
+                        )
+                    }
+                </ul>
+        }
         <p class="italic" hx-include="input[name='week']"
            hx-swap="outerHTML"
            hx-get="/partials/tasks.new">
