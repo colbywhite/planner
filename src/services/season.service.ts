@@ -14,7 +14,7 @@ type NumberedWeeksTable = Tables<'weeks'> & {
     number: NonNullable<Tables<'numbered_weeks'>["number"]>,
     total: NonNullable<Tables<'numbered_weeks'>['total']>
 }
-type WeekWithSeason = Tables<'weeks'> & { season: Tables<'seasons'> }
+type NumberedWeekWithSeason = NumberedWeeksTable & { season: Tables<'seasons'> }
 type NumberedWeekWithTasks = NumberedWeeksTable & { tasks: Tables<'tasks'>[] } & { season: Tables<'seasons'> }
 
 export class SeasonService {
@@ -36,19 +36,27 @@ export class SeasonService {
     }
     public async getWeeks() {
         return safeOperation(
-            this.client.from('weeks')
+            this.client.from('numbered_weeks')
                 .select('*, season:seasons(*)')
                 .order('start', {ascending: true})
                 .eq('seasons.name', this.seasonName)
-                .returns<WeekWithSeason[]>()    // i don't know why they supabase types assume season could be null, but that's impossible due to the query
+                .returns<NumberedWeekWithSeason[]>()    // i don't know why they supabase types assume season could be null, but that's impossible due to the query
         )
+    }
+
+    public async safelyGetTasks(weekNum: number) {
+        if (isNaN(weekNum)) {
+            return this.safelyGetTasksForDate(DateTime.now())
+        } else {
+            return this.safelyGetTasksForWeekNumber(weekNum)
+        }
     }
 
     /**
      * For a given date, get the tasks for the corresponding week.
      * If there is no corresponding week, return the tasks for the closest week.
      */
-    public async getTasksForDateSafely(date: DateTime<true>) {
+    public async safelyGetTasksForDate(date: DateTime<true>) {
         const week = await this.getTasksForDate(date)
         if (week) {
             return week
@@ -64,6 +72,17 @@ export class SeasonService {
             throw new Error('There are no weeks for the season')
         }
         return closestWeek
+    }
+
+    public async safelyGetTasksForWeekNumber(weekNum: number) {
+        const result = await safeOperation(
+            this.client.rpc('safely_get_numbered_week', {seasonname: this.seasonName, weeknumber: weekNum})
+                .single<NumberedWeekWithTasks>(),
+        )
+        if (result === null) {
+            throw new Error('There are no weeks for the season')
+        }
+        return result
     }
 
     /**

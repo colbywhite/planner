@@ -168,6 +168,24 @@ export type Database = {
         }
         Returns: string
       }
+      safely_get_numbered_week: {
+        Args: {
+          seasonname: string
+          weeknumber: number
+        }
+        Returns: {
+          id: string
+          created_at: string
+          start: string
+          end: string
+          subtitle: string
+          season_id: string
+          total: number
+          number: number
+          tasks: Json
+          season: Json
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

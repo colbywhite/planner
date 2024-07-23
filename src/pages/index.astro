@@ -1,15 +1,16 @@
 ---
 import Root from "../layout/root.astro";
 import {SeasonService} from "../services/season.service";
-import {DateTime} from "luxon";
 import {formatDateForSubtitle, formatDateForTitle} from "../utils";
 const seasonName = 'Fall \'24'
-const now = DateTime.now()
+const givenWeek = Astro.url.searchParams.get('week') || undefined;
 const seasonSvc = new SeasonService(Astro.cookies, seasonName);
 const [{season, tasks, ...week}, weeks] = await Promise.all([
-    seasonSvc.getTasksForDateSafely(now),
+    seasonSvc.safelyGetTasks(Number(givenWeek)),
     seasonSvc.getWeeks()
 ]);
+const previousWeek = week.number - 1 < 1 ? undefined : week.number - 1
+const nextWeek = week.number + 1 > weeks.length ? undefined : week.number + 1
 ---
 <Root title={season.name}>
     <main class="flex flex-col gap-8 items-center m-4">
@@ -19,7 +20,12 @@ const [{season, tasks, ...week}, weeks] = await Promise.all([
                     <p class="italic text-center font-light">{week.subtitle}</p>
             }
             <div class="flex flex-row justify-between items-center w-full text-sm">
-                <a href="#" class="link link-hover link-primary">&lt;</a>
+                {previousWeek
+                    ?
+                        <a href=`?week=${previousWeek}` class="link link-hover link-primary">&lt;</a>
+                    :
+                        <div class="text-neutral">&lt;</div>
+                }
                 <details class="dropdown">
                     <summary class="btn btn-xs btn-ghost">
                         {formatDateForTitle(week.start)} - {formatDateForTitle(week.end)}
@@ -27,14 +33,19 @@ const [{season, tasks, ...week}, weeks] = await Promise.all([
                     <ul class="menu dropdown-content bg-base-300 rounded-box z-[1] w-52 p-2 shadow">
                         {weeks.map(w =>
                                 <li>
-                                    <a class="link link-hover">
+                                    <a href=`?week=${w.number}` class="link link-hover">
                                         {formatDateForSubtitle(w.start)} - {formatDateForSubtitle(w.end)}
                                     </a>
                                 </li>
                         )}
                     </ul>
                 </details>
-                <a href="#" class="link link-hover link-primary">&gt;</a>
+                {nextWeek
+                    ?
+                        <a href=`?week=${nextWeek}` class="link link-hover link-primary">&gt;</a>
+                    :
+                        <div class="text-neutral">&gt;</div>
+                }
             </div>
         </header>
         <ul class="list-disc list-inside grow flex flex-col gap-2">
