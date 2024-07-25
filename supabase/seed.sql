@@ -85,50 +85,102 @@ VALUES (uuid_generate_v4(), -- id
         FALSE -- is_anonymous
        );
 
-INSERT INTO "seasons" ("name", "owner")
-SELECT 'Fall ''24', "id"
-FROM "auth"."users";
+DO
+$BODY$
+    DECLARE
+        user_id          UUID;
+        summer_season_id UUID;
+        fall_season_id   UUID;
+    BEGIN
+        SELECT id INTO user_id FROM auth.users WHERE email = 'dev@colbywhite.dev';
 
-INSERT INTO "weeks" ("start", "end", "season_id")
-SELECT (CURRENT_DATE at time zone 'America/Chicago')::date - 7, (CURRENT_DATE at time zone 'America/Chicago')::date - 1, "id"
-FROM "seasons";
+        INSERT INTO "seasons" ("name", "owner")
+        VALUES ('Summer ''24', user_id)
+        RETURNING id INTO summer_season_id;
+        INSERT INTO "seasons" ("name", "owner")
+        VALUES ('Fall ''24', user_id)
+        RETURNING id INTO fall_season_id;
 
-INSERT INTO "weeks" ("start", "end", "subtitle", "season_id")
-SELECT (CURRENT_DATE at time zone 'America/Chicago')::date, (CURRENT_DATE at time zone 'America/Chicago')::date + 6, 'This week', "id"
-FROM "seasons";
+        -- summer weeks
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-07-29', '2024-08-04', summer_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-08-05', '2024-08-11', summer_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-08-12', '2024-08-18', summer_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-08-19', '2024-08-25', summer_season_id);
 
-INSERT INTO "weeks" ("start", "end", "season_id")
-SELECT (CURRENT_DATE at time zone 'America/Chicago')::date + 7, (CURRENT_DATE at time zone 'America/Chicago')::date + 13, "id"
-FROM "seasons";
+        -- fall weeks
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-08-26', '2024-09-01', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-09-02', '2024-09-08', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-09-09', '2024-09-15', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-09-16', '2024-09-22', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-09-23', '2024-09-29', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-09-30', '2024-10-06', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-10-07', '2024-10-13', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-10-14', '2024-10-20', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-10-21', '2024-10-27', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-10-28', '2024-11-03', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-11-04', '2024-11-10', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-11-11', '2024-11-17', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-11-18', '2024-11-24', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-11-25', '2024-12-01', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-12-02', '2024-12-08', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-12-09', '2024-12-15', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id")
+        VALUES ('2024-12-16', '2024-12-22', fall_season_id);
 
-INSERT INTO "tasks" ("emoji", "name", "week_id")
-SELECT '🔵', 'Duis porttitor massa nec odio lobortis lobortis', "id"
-FROM "numbered_weeks"
-WHERE number = 1;
+        -- summer tasks
+        INSERT INTO "tasks" ("emoji", "name", "week_id")
+        SELECT '🔵', 'Duis porttitor massa nec odio lobortis lobortis', "id"
+        FROM "numbered_weeks"
+        WHERE number = 1
+          AND season_id = summer_season_id;
+        INSERT INTO "tasks" ("emoji", "name", "week_id")
+        SELECT '🟠', 'Proin aliquet ligula a mattis mollis', "id"
+        FROM "numbered_weeks"
+        WHERE number = 2
+          AND season_id = summer_season_id;
 
-INSERT INTO "tasks" ("emoji", "name", "week_id")
-SELECT '🟠', 'Proin aliquet ligula a mattis mollis', "id"
-FROM "numbered_weeks"
-WHERE number = 1;
-
-INSERT INTO "tasks" ("emoji", "name", "week_id")
-SELECT '🔵', 'Maecenas quis ipsum cursus, euismod sapien semper, porttitor nisi', "id"
-FROM "numbered_weeks"
-WHERE number = 2;
-
-INSERT INTO "tasks" ("emoji", "name", "week_id")
-SELECT '🟠',
-       'Nulla pharetra, magna eget fringilla faucibus, nisi eros malesuada lacus, et mattis felis mauris eget libero',
-       "id"
-FROM "numbered_weeks"
-WHERE number = 2;
-
-INSERT INTO "tasks" ("emoji", "name", "week_id")
-SELECT '🔵', 'Vestibulum nisl erat, gravida non ultrices et, luctus at nisi', "id"
-FROM "numbered_weeks"
-WHERE number = 3;
-
-INSERT INTO "tasks" ("emoji", "name", "week_id")
-SELECT '🟠', 'Mauris turpis eros, mattis ut nunc eu, mattis euismod nibh', "id"
-FROM "numbered_weeks"
-WHERE number = 3;
+        -- fall tasks
+        INSERT INTO "tasks" ("emoji", "name", "week_id")
+        SELECT '🔵', 'Maecenas quis ipsum cursus, euismod sapien semper, porttitor nisi', "id"
+        FROM "numbered_weeks"
+        WHERE number = 1
+          AND season_id = fall_season_id;
+        INSERT INTO "tasks" ("emoji", "name", "week_id")
+        SELECT '🟠',
+               'Nulla pharetra, magna eget fringilla faucibus, nisi eros malesuada lacus, et mattis felis mauris eget libero',
+               "id"
+        FROM "numbered_weeks"
+        WHERE number = 1
+          AND season_id = fall_season_id;
+        INSERT INTO "tasks" ("emoji", "name", "week_id")
+        SELECT '🔵', 'Vestibulum nisl erat, gravida non ultrices et, luctus at nisi', "id"
+        FROM "numbered_weeks"
+        WHERE number = 2
+          AND season_id = fall_season_id;
+        INSERT INTO "tasks" ("emoji", "name", "week_id")
+        SELECT '🟠', 'Mauris turpis eros, mattis ut nunc eu, mattis euismod nibh', "id"
+        FROM "numbered_weeks"
+        WHERE number = 2
+          AND season_id = fall_season_id;
+    END
+$BODY$;
