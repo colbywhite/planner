@@ -13,6 +13,6 @@ export const POST: APIRoute = async ({request, cookies, redirect}) => {
     if (emoji === undefined || name === undefined || week_id === undefined) {
         throw new Error('Bad input')
     }
-    await new SeasonService(cookies).addTasks({emoji, name, week_id})
+    await new SeasonService(cookies, 'Fall \'24').addTasks({emoji, name, week_id})
     return redirect(redirectPath)
 }

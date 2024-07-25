@@ -165,6 +165,7 @@ export type Database = {
       get_closest_week_id: {
         Args: {
           date: string
+          seasonname: string
         }
         Returns: string
       }

@@ -20,7 +20,7 @@ type NumberedWeekWithTasks = NumberedWeeksTable & { tasks: Tables<'tasks'>[] } &
 export class SeasonService {
     private readonly client: SupabaseClient<Database>
 
-    public constructor(cookies: AstroCookies, private readonly seasonName = "Fall '24") {
+    public constructor(cookies: AstroCookies, private readonly seasonName: string) {
         this.client = createSupabaseClient(cookies)
         // TODO assert that the season exists and has some weeks.
     }
@@ -115,7 +115,7 @@ export class SeasonService {
 
     private getClosestWeekId(date: DateTime<true>) {
         return safeOperation(
-            this.client.rpc('get_closest_week_id', {date: date.toISODate()})
+            this.client.rpc('get_closest_week_id', {date: date.toISODate(), seasonname: this.seasonName})
         )
     }
 }
