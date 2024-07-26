@@ -114,7 +114,7 @@ export class TaskService {
                 .select('*, tasks(*), season:seasons(*)')
                 .lte('start', date.toISODate())
                 .gte('end', date.toISODate())
-                .eq('seasons.id', this.season)
+                .eq('season_id', this.season)
                 .maybeSingle<NumberedWeekWithTasks>()
         )
     }
@@ -127,7 +127,7 @@ export class TaskService {
             this.client.from('numbered_weeks')
                 .select('*, tasks(*), season:seasons(*)')
                 .eq('id', id)
-                .eq('seasons.id', this.season)
+                .eq('season_id', this.season)
                 .maybeSingle<NumberedWeekWithTasks>()
         )
     }
