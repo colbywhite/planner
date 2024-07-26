@@ -61,11 +61,12 @@ const nextWeek = week.number + 1 > weeks.length ? undefined : week.number + 1
                     }
                 </ul>
         }
-        <p class="italic" hx-include="input[name='week']"
+        <p class="italic" hx-include="input[name=week], input[name=season]"
            hx-swap="outerHTML"
            hx-get="/partials/tasks.new">
             Add task
             <input type="hidden" name="week" value={week.id}>
+            <input type="hidden" name="season" value={season.id}>
         </p>
     </main>
 </Root>

@@ -10,9 +10,10 @@ export const POST: APIRoute = async ({request, cookies, redirect}) => {
     const emoji = parseStringFromFormData(formData, 'emoji')
     const name = parseStringFromFormData(formData, 'name')
     const week_id = parseStringFromFormData(formData, 'week')
-    if (emoji === undefined || name === undefined || week_id === undefined) {
+    const season_id = parseStringFromFormData(formData, 'season')
+    if (emoji === undefined || name === undefined || week_id === undefined || season_id === undefined) {
         throw new Error('Bad input')
     }
-    await new SeasonService(cookies, 'fall_24').addTasks({emoji, name, week_id})
+    await new SeasonService(cookies, season_id).addTasks({emoji, name, week_id})
     return redirect(redirectPath)
 }

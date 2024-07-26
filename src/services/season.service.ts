@@ -22,16 +22,38 @@ export class SeasonService {
 
     public constructor(cookies: AstroCookies, private readonly season: string) {
         this.client = createSupabaseClient(cookies)
-        // TODO assert that the season exists and has some weeks.
     }
 
     public async addTasks(insert: TablesInsert<'tasks'>) {
-        // TODO check the week is a real week in the season
-        console.log('addTasks', this.season, insert)
+        console.log('addTasks', {...insert, season: this.season})
+        await this.assertOwnedWeek(insert.week_id)
         return safeOperation(
             this.client.from('tasks')
                 .insert(insert)
                 .select()
+        )
+    }
+
+    private async assertValidSeason(season_id: string) {
+        await safeOperation(
+            this.client
+                .from('seasons')
+                .select('id')
+                .eq('id', season_id)
+                .single(),
+            `'${season_id}' is not a valid season`,
+        )
+    }
+
+    private async assertOwnedWeek(week_id: string) {
+        await this.assertValidSeason(this.season)
+        await safeOperation(
+            this.client
+                .from('weeks')
+                .select('season_id')
+                .eq('id', week_id)
+                .single(),
+            `'${week_id}' does not belong to '${this.season}'`,
         )
     }
 
@@ -123,14 +145,14 @@ export class SeasonService {
 
 type PostgrestResponses<T> = PostgrestSingleResponse<T> | PostgrestMaybeSingleResponse<T> | PostgrestResponse<T>
 
-async function safeOperation<Result>(query: PromiseLike<PostgrestResponse<Result>>): Promise<Result[]>
-async function safeOperation<Result>(query: PromiseLike<PostgrestMaybeSingleResponse<Result>>): Promise<Result | null>
-async function safeOperation<Result>(query: PromiseLike<PostgrestSingleResponse<Result>>): Promise<Result>
-async function safeOperation<Result>(query: PromiseLike<PostgrestResponses<Result>>) {
+async function safeOperation<Result>(query: PromiseLike<PostgrestResponse<Result>>, errorMsg?: string): Promise<Result[]>
+async function safeOperation<Result>(query: PromiseLike<PostgrestMaybeSingleResponse<Result>>, errorMsg?: string): Promise<Result | null>
+async function safeOperation<Result>(query: PromiseLike<PostgrestSingleResponse<Result>>, errorMsg?: string): Promise<Result>
+async function safeOperation<Result>(query: PromiseLike<PostgrestResponses<Result>>, errorMsg?: string) {
     const {data, error} = await query
     if (error) {
-        console.error('error executing operation', error)
-        throw error
+        console.error(errorMsg ? errorMsg : error.message)
+        throw new Error(errorMsg ? errorMsg : error.message)
     }
     return data
 }

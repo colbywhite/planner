@@ -1,10 +1,12 @@
 ---
 export const partial = true
 const week = Astro.url.searchParams.get('week')
+const season = Astro.url.searchParams.get('season')
 ---
 
 <form action="/api/tasks.new" method="post" class="two-input-form-grid w-full gap-4">
     <input type="hidden" name="week" value={week}/>
+    <input type="hidden" name="season" value={season}/>
     <!--TODO: better emoji picker-->
     <label class="form-control two-input-form-grid-input-one">
         <div class="label">
