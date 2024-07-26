@@ -1,0 +1,28 @@
+---
+export const partial = true
+---
+
+<form action="/api/seasons.new" method="post" class="flex flex-col w-full gap-4">
+    <label class="form-control">
+        <div class="label">
+            <span class="label-text">Season name</span>
+        </div>
+        <input type="text" name="name" placeholder="Season name" aria-label="Season"
+               class="input input-bordered"/>
+    </label>
+    <label class="form-control">
+        <div class="label">
+            <span class="label-text">Start date</span>
+        </div>
+        <input type="date" name="start" aria-label="Season"
+               class="input input-bordered"/>
+    </label>
+    <label class="form-control">
+        <div class="label">
+            <span class="label-text">End date</span>
+        </div>
+        <input type="date" name="end" aria-label="Season"
+               class="input input-bordered"/>
+    </label>
+    <button type="submit" class="btn btn-outline btn-primary">Add season</button>
+</form>
