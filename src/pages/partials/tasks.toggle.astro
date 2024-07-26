@@ -1,0 +1,20 @@
+---
+import {TaskService} from "../../services/task.service";
+import {parseStringFromFormData} from "../../utils";
+
+export const partial = true
+
+const formData = await Astro.request.formData()
+const taskId = parseStringFromFormData(formData, 'task')
+const week = parseStringFromFormData(formData, 'week')
+const season = parseStringFromFormData(formData, 'season')
+if (taskId === undefined || week === undefined || season === undefined) {
+    throw new Error('Bad input')
+}
+const updatedTask = await new TaskService(Astro.cookies, season).toggleTask(week, taskId)
+---
+<input type="hidden" name="season" value={season} />
+<input type="hidden" name="week" value={week} />
+<input type="hidden" name="task" value={taskId} />
+<input type="checkbox" class="checkbox" checked={updatedTask.completed} hx-post="/partials/tasks.toggle"/>
+<span class={updatedTask.completed ? 'line-through' : ''}>{updatedTask.emoji} {updatedTask.name}</span>

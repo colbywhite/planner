@@ -21,7 +21,7 @@ export class TaskService {
 
     public async addTasks(insert: TablesInsert<'tasks'>) {
         console.log('addTasks', {...insert, season: this.season})
-        await this.assertOwnedWeek(insert.week_id)
+        await this.assertRelatedWeek(insert.week_id)
         return safeOperation(
             this.client.from('tasks')
                 .insert(insert)
@@ -40,7 +40,7 @@ export class TaskService {
         )
     }
 
-    private async assertOwnedWeek(week_id: string) {
+    private async assertRelatedWeek(week_id: string) {
         await this.assertValidSeason(this.season)
         await safeOperation(
             this.client
@@ -49,6 +49,18 @@ export class TaskService {
                 .eq('id', week_id)
                 .single(),
             `'${week_id}' does not belong to '${this.season}'`,
+        )
+    }
+
+    private async assertRelatedTask(week_id: string, task_id: string) {
+        await this.assertRelatedWeek(week_id)
+        await safeOperation(
+            this.client
+                .from('tasks')
+                .select('week_id')
+                .eq('id', task_id)
+                .single(),
+            `'${task_id}' does not belong to '${week_id}'`,
         )
     }
 
@@ -61,6 +73,17 @@ export class TaskService {
                 .eq('season_id', this.season)
                 .returns<NumberedWeeksTable[]>()
         )
+    }
+
+    public async toggleTask(week: string, task: string){
+        await this.assertRelatedTask(week, task)
+        const updatedTask= await safeOperation(
+            this.client.rpc('toggle_task_completion', {task_id: task})
+        )
+        if (!updatedTask) {
+            throw new Error('Error toggling task')
+        }
+        return updatedTask
     }
 
     public async safelyGetTasks(weekNum: number) {

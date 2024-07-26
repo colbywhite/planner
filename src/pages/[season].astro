@@ -55,11 +55,18 @@ const nextWeek = week.number + 1 > weeks.length ? undefined : week.number + 1
             ?
                 <p>No tasks yet.</p>
             :
-                <ul class="list-disc list-inside grow flex flex-col gap-2">
+                <ul class="flex flex-col gap-8 ">
                     {
                         tasks.map(
-                            ({emoji, name}) =>
-                                    <li>{emoji} {name}</li>
+                            ({emoji, name, completed, id}) =>
+                                    <li class="flex flex-row gap-4 items-center" hx-include="this" hx-target="this">
+                                        <input type="checkbox" class="checkbox" checked={completed}
+                                               hx-post="/partials/tasks.toggle"/>
+                                        <span class={completed ? 'line-through' : ''}>{emoji} {name}</span>
+                                        <input type="hidden" name="season" value={season.id}/>
+                                        <input type="hidden" name="week" value={week.id}/>
+                                        <input type="hidden" name="task" value={id}/>
+                                    </li>
                         )
                     }
                 </ul>

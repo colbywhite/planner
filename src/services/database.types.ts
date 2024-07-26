@@ -65,6 +65,7 @@ export type Database = {
       }
       tasks: {
         Row: {
+          completed: boolean
           created_at: string
           emoji: string
           id: string
@@ -72,6 +73,7 @@ export type Database = {
           week_id: string
         }
         Insert: {
+          completed?: boolean
           created_at?: string
           emoji: string
           id?: string
@@ -79,6 +81,7 @@ export type Database = {
           week_id: string
         }
         Update: {
+          completed?: boolean
           created_at?: string
           emoji?: string
           id?: string
@@ -186,6 +189,19 @@ export type Database = {
           tasks: Json
           season: Json
         }[]
+      }
+      toggle_task_completion: {
+        Args: {
+          task_id: string
+        }
+        Returns: {
+          completed: boolean
+          created_at: string
+          emoji: string
+          id: string
+          name: string
+          week_id: string
+        }
       }
       url_friendly_text: {
         Args: {
