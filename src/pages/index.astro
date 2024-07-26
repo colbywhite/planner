@@ -2,9 +2,9 @@
 import Root from "../layout/root.astro";
 import {SeasonService} from "../services/season.service";
 import {formatDateForSubtitle, formatDateForTitle} from "../utils";
-const seasonName = 'Fall \'24'
+const seasonId = 'fall_24' as const
 const givenWeek = Astro.url.searchParams.get('week') || undefined;
-const seasonSvc = new SeasonService(Astro.cookies, seasonName);
+const seasonSvc = new SeasonService(Astro.cookies, seasonId);
 const [{season, tasks, ...week}, weeks] = await Promise.all([
     seasonSvc.safelyGetTasks(Number(givenWeek)),
     seasonSvc.getWeeks()

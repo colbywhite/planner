@@ -43,7 +43,7 @@ export type Database = {
         }
         Insert: {
           created_at?: string
-          id?: string
+          id: string
           name: string
           owner: string
         }
@@ -165,13 +165,13 @@ export type Database = {
       get_closest_week_id: {
         Args: {
           date: string
-          seasonname: string
+          seasonid: string
         }
         Returns: string
       }
       safely_get_numbered_week: {
         Args: {
-          seasonname: string
+          seasonid: string
           weeknumber: number
         }
         Returns: {
@@ -186,6 +186,12 @@ export type Database = {
           tasks: Json
           season: Json
         }[]
+      }
+      url_friendly_text: {
+        Args: {
+          text: string
+        }
+        Returns: string
       }
     }
     Enums: {

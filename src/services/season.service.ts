@@ -20,26 +20,27 @@ type NumberedWeekWithTasks = NumberedWeeksTable & { tasks: Tables<'tasks'>[] } &
 export class SeasonService {
     private readonly client: SupabaseClient<Database>
 
-    public constructor(cookies: AstroCookies, private readonly seasonName: string) {
+    public constructor(cookies: AstroCookies, private readonly season: string) {
         this.client = createSupabaseClient(cookies)
         // TODO assert that the season exists and has some weeks.
     }
 
     public async addTasks(insert: TablesInsert<'tasks'>) {
         // TODO check the week is a real week in the season
-        console.log('addTasks', this.seasonName, insert)
+        console.log('addTasks', this.season, insert)
         return safeOperation(
             this.client.from('tasks')
                 .insert(insert)
                 .select()
         )
     }
+
     public async getWeeks() {
         return safeOperation(
             this.client.from('numbered_weeks')
                 .select('*, season:seasons(*)')
                 .order('start', {ascending: true})
-                .eq('seasons.name', this.seasonName)
+                .eq('seasons.id', this.season)
                 .returns<NumberedWeekWithSeason[]>()    // i don't know why they supabase types assume season could be null, but that's impossible due to the query
         )
     }
@@ -76,7 +77,7 @@ export class SeasonService {
 
     public async safelyGetTasksForWeekNumber(weekNum: number) {
         const result = await safeOperation(
-            this.client.rpc('safely_get_numbered_week', {seasonname: this.seasonName, weeknumber: weekNum})
+            this.client.rpc('safely_get_numbered_week', {seasonid: this.season, weeknumber: weekNum})
                 .single<NumberedWeekWithTasks>(),
         )
         if (result === null) {
@@ -95,7 +96,7 @@ export class SeasonService {
                 .select('*, tasks(*), season:seasons(*)')
                 .lte('start', date.toISODate())
                 .gte('end', date.toISODate())
-                .eq('seasons.name', this.seasonName)
+                .eq('seasons.id', this.season)
                 .maybeSingle<NumberedWeekWithTasks>()
         )
     }
@@ -108,14 +109,14 @@ export class SeasonService {
             this.client.from('numbered_weeks')
                 .select('*, tasks(*), season:seasons(*)')
                 .eq('id', id)
-                .eq('seasons.name', this.seasonName)
+                .eq('seasons.id', this.season)
                 .maybeSingle<NumberedWeekWithTasks>()
         )
     }
 
     private getClosestWeekId(date: DateTime<true>) {
         return safeOperation(
-            this.client.rpc('get_closest_week_id', {date: date.toISODate(), seasonname: this.seasonName})
+            this.client.rpc('get_closest_week_id', {date: date.toISODate(), seasonid: this.season})
         )
     }
 }

@@ -89,8 +89,8 @@ DO
 $BODY$
     DECLARE
         user_id          UUID;
-        summer_season_id UUID;
-        fall_season_id   UUID;
+        summer_season_id VARCHAR(255);
+        fall_season_id   VARCHAR(255);
     BEGIN
         SELECT id INTO user_id FROM auth.users WHERE email = 'dev@colbywhite.dev';
 
@@ -132,20 +132,18 @@ $BODY$
         VALUES ('2024-10-21', '2024-10-27', fall_season_id);
         INSERT INTO "weeks" ("start", "end", "season_id")
         VALUES ('2024-10-28', '2024-11-03', fall_season_id);
-        INSERT INTO "weeks" ("start", "end", "season_id")
-        VALUES ('2024-11-04', '2024-11-10', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id", subtitle)
+        VALUES ('2024-11-04', '2024-11-10', fall_season_id, 'Spring registration');
         INSERT INTO "weeks" ("start", "end", "season_id")
         VALUES ('2024-11-11', '2024-11-17', fall_season_id);
         INSERT INTO "weeks" ("start", "end", "season_id")
         VALUES ('2024-11-18', '2024-11-24', fall_season_id);
-        INSERT INTO "weeks" ("start", "end", "season_id")
-        VALUES ('2024-11-25', '2024-12-01', fall_season_id);
+        INSERT INTO "weeks" ("start", "end", "season_id", subtitle)
+        VALUES ('2024-11-25', '2024-12-01', fall_season_id, 'Thanksgiving');
         INSERT INTO "weeks" ("start", "end", "season_id")
         VALUES ('2024-12-02', '2024-12-08', fall_season_id);
         INSERT INTO "weeks" ("start", "end", "season_id")
         VALUES ('2024-12-09', '2024-12-15', fall_season_id);
-        INSERT INTO "weeks" ("start", "end", "season_id")
-        VALUES ('2024-12-16', '2024-12-22', fall_season_id);
 
         -- summer tasks
         INSERT INTO "tasks" ("emoji", "name", "week_id")

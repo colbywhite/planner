@@ -10,7 +10,8 @@
     "preview": "astro preview",
     "astro": "astro",
     "types": "supabase gen types typescript --local > src/services/database.types.ts",
-    "prepare": "husky"
+    "prepare": "husky",
+    "supabase": "supabase"
   },
   "dependencies": {
     "@astrojs/alpinejs": "^0.4.0",
