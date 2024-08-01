@@ -1,6 +1,7 @@
 ---
 import Root from "../layout/root.astro";
 import {SeasonService} from "../services/season.service";
+import NavLink from "../components/NavLink.astro";
 const seasonSvc = new SeasonService(Astro.cookies);
 const seasons = await seasonSvc.getSeasons()
 ---
@@ -19,7 +20,7 @@ const seasons = await seasonSvc.getSeasons()
                         seasons.map(
                             (season) =>
                                     <li>
-                                        <a href={season.id} class="link">{season.name}</a>
+                                        <NavLink href={season.id} class="link">{season.name}</NavLink>
                                     </li>
                         )
                     }

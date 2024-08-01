@@ -1,4 +1,5 @@
 ---
+import NavLink from "./NavLink.astro";
 interface Props {
     avatarUrl: string
     name: string
@@ -9,7 +10,7 @@ const {avatarUrl, name, title = 'Planner'} = Astro.props
 
 <nav class="navbar bg-base-100">
     <div class="navbar-start">
-        <a data-astro-prefetch="false" href="/" class="btn btn-ghost btn-xs text-sm">{title}</a>
+        <NavLink href="/" class="btn btn-ghost btn-xs text-sm">{title}</NavLink>
     </div>
     <div class="navbar-end">
         {name
@@ -22,12 +23,12 @@ const {avatarUrl, name, title = 'Planner'} = Astro.props
                     </div>
                     <ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-300 w-28">
                         <li>
-                            <a data-astro-prefetch="false" href="/auth/logout" class="btn btn-xs btn-link">Log out</a>
+                            <NavLink href="/auth/logout" class="btn btn-xs btn-link">Log out</NavLink>
                         </li>
                     </ul>
                 </div>
             :
-                <a data-astro-prefetch="false" href="/auth/login" class="btn btn-secondary">Log in</a>
+                <NavLink href="/auth/login" class="btn btn-secondary">Log in</NavLink>
         }
     </div>
 </nav>
