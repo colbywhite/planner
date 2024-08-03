@@ -22,5 +22,8 @@ const {user} = Astro.locals
 <body class="h-screen bg-base-100 m-4 antialiased w-96 mx-auto">
 <NavBar title={title} avatarUrl={user?.user_metadata?.avatar_url} name={user?.user_metadata?.full_name} />
 <slot />
+<script>
+    import 'emoji-picker-element';
+</script>
 </body>
 </html>

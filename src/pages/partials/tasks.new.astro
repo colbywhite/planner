@@ -1,4 +1,5 @@
 ---
+import EmojiInput from "../../components/EmojiInput.astro";
 export const partial = true
 const week = Astro.url.searchParams.get('week')
 const season = Astro.url.searchParams.get('season')
@@ -12,14 +13,7 @@ const season = Astro.url.searchParams.get('season')
         <div class="label">
             <span class="label-text">Emoji</span>
         </div>
-        <select name="emoji" aria-label="Emoji"
-                class="select select-bordered">
-            <option>🟠</option>
-            <option>🔵</option>
-            <option>🟡</option>
-            <option>🟢</option>
-            <option>🎓</option>
-        </select>
+        <EmojiInput name="emoji"/>
     </label>
     <label class="form-control two-input-form-grid-input-two">
         <div class="label">

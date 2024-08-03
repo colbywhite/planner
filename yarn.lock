@@ -1771,6 +1771,11 @@ emmet@^2.4.3:
     "@emmetio/abbreviation" "^2.3.3"
     "@emmetio/css-abbreviation" "^2.1.8"
 
+emoji-picker-element@^1.22.0:
+  version "1.22.0"
+  resolved "https://registry.yarnpkg.com/emoji-picker-element/-/emoji-picker-element-1.22.0.tgz#7514f1ef57b3bd1a049ded57e7e4ccd82b682b86"
+  integrity sha512-qNEI3Qtx88H0mGQ/nKlkU0BU8YQ48icE3y00uPXkq6Vls6lUtGufgoL6vny5bWc2OpvzNEBODLkBdcS1fhmrGQ==
+
 emoji-regex@^10.3.0:
   version "10.3.0"
   resolved "https://registry.yarnpkg.com/emoji-regex/-/emoji-regex-10.3.0.tgz#76998b9268409eb3dae3de989254d456e70cfe23"
