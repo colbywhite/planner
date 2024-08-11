@@ -1,5 +1,5 @@
 import type {SupabaseClient} from "@supabase/supabase-js";
-import type {Database, Tables, TablesInsert} from "./database.types";
+import type {Database, Tables, TablesInsert, TablesUpdate} from "./database.types";
 import type {AstroCookies} from "astro";
 import {createSupabaseClient} from "./supabase.service";
 import {DateTime} from "luxon";
@@ -25,6 +25,18 @@ export class TaskService {
         return safeOperation(
             this.client.from('tasks')
                 .insert(insert)
+                .select()
+        )
+    }
+
+    public async updateTask(update: TablesUpdate<'tasks'> & { week_id: string, id: string }) {
+        console.log('updateTask', {...update, season: this.season})
+        await this.assertRelatedTask(update.week_id, update.id)
+        return safeOperation(
+            this.client.from('tasks')
+                .update(update)
+                .eq('id', update.id)
+                .eq('week_id', update.week_id)
                 .select()
         )
     }
@@ -75,9 +87,9 @@ export class TaskService {
         )
     }
 
-    public async toggleTask(week: string, task: string){
+    public async toggleTask(week: string, task: string) {
         await this.assertRelatedTask(week, task)
-        const updatedTask= await safeOperation(
+        const updatedTask = await safeOperation(
             this.client.rpc('toggle_task_completion', {task_id: task})
         )
         if (!updatedTask) {

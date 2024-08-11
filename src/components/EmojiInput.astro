@@ -2,9 +2,11 @@
 import type {HTMLAttributes} from "astro/types";
 interface Props extends HTMLAttributes<'input'> {
 }
+const{value:initialValue, ...props} = Astro.props
+const xData = {open: false, value: initialValue || ''}
 ---
-<div x-data="{open: false, value: ''}">
-    <input type="hidden" {...Astro.props} :value="value" />
+<div x-data={JSON.stringify(xData)}>
+    <input type="hidden" {...props} :value="value" />
     <button type="button" class="btn w-full text-lg input-bordered" @click="open = !open" x-text="value"></button>
     <emoji-picker class="absolute mt-2" x-cloak x-show="open" @emoji-click="open = false; value=$event.detail.unicode"></emoji-picker>
 </div>

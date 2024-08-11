@@ -1,0 +1,33 @@
+---
+import {parseStringFromFormData} from "../../utils";
+import EmojiInput from "../../components/EmojiInput.astro";
+export const partial = true
+
+const formData = await Astro.request.formData()
+const emoji = parseStringFromFormData(formData, 'emoji')
+const name = parseStringFromFormData(formData, 'name')
+const task_id = parseStringFromFormData(formData, 'task')
+const week_id = parseStringFromFormData(formData, 'week')
+const season_id = parseStringFromFormData(formData, 'season')
+---
+
+<form action="/api/tasks.edit" method="post" class="two-input-form-grid w-full gap-4">
+    <input type="hidden" name="week" value={week_id}/>
+    <input type="hidden" name="season" value={season_id}/>
+    <input type="hidden" name="task" value={task_id}/>
+    <!--TODO: better emoji picker-->
+    <label class="form-control two-input-form-grid-input-one">
+        <div class="label">
+            <span class="label-text">Emoji</span>
+        </div>
+        <EmojiInput name="emoji" value={emoji}/>
+    </label>
+    <label class="form-control two-input-form-grid-input-two">
+        <div class="label">
+            <span class="label-text">Task name</span>
+        </div>
+        <input type="text" name="name" placeholder="Task name" aria-label="Task"
+               class="input input-bordered" value={name}/>
+    </label>
+    <button type="submit" class="btn btn-outline btn-primary two-input-form-grid-btn">Update</button>
+</form>

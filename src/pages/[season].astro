@@ -3,8 +3,9 @@ import Root from "../layout/root.astro";
 import {TaskService} from "../services/task.service";
 import {formatDateForSubtitle, formatDateForTitle} from "../utils";
 import NavLink from "../components/NavLink.astro";
+import EllipsisMenu from "../components/EllipsisMenu.astro";
 const {season: seasonId} = Astro.params
-if(!seasonId) {
+if (!seasonId) {
     throw new Error('no season id')
 }
 const givenWeek = Astro.url.searchParams.get('week') || undefined;
@@ -56,17 +57,27 @@ const nextWeek = week.number + 1 > weeks.length ? undefined : week.number + 1
             ?
                 <p>No tasks yet.</p>
             :
-                <ul class="flex flex-col gap-8 ">
+                <ul class="flex flex-col gap-8 w-full">
                     {
                         tasks.map(
                             ({emoji, name, completed, id}) =>
-                                    <li class="flex flex-row gap-4 items-center" hx-include="this" hx-target="this">
-                                        <input type="checkbox" class="checkbox" checked={completed}
-                                               hx-post="/partials/tasks.toggle"/>
-                                        <span class={completed ? 'line-through' : ''}>{emoji} {name}</span>
-                                        <input type="hidden" name="season" value={season.id}/>
-                                        <input type="hidden" name="week" value={week.id}/>
-                                        <input type="hidden" name="task" value={id}/>
+                                    <li hx-include="this" hx-target="this">
+                                        <div class="grid grid-cols-[1.5rem_auto_1.5rem] gap-4 items-center">
+                                            <input type="checkbox" class="checkbox" checked={completed}
+                                                   hx-post="/partials/tasks.toggle"/>
+                                            <span class={completed ? 'line-through' : ''}>{emoji} {name}</span>
+                                            <EllipsisMenu>
+                                                <ul class="menu dropdown-content bg-base-300 rounded-box z-[1] w-16 p-2 shadow gap-4">
+                                                    <li class="link link-hover" hx-post="/partials/tasks.edit">edit</li>
+                                                    <li class="link link-hover disabled">delete</li>
+                                                </ul>
+                                            </EllipsisMenu>
+                                            <input type="hidden" name="season" value={season.id}/>
+                                            <input type="hidden" name="week" value={week.id}/>
+                                            <input type="hidden" name="task" value={id}/>
+                                            <input type="hidden" name="emoji" value={emoji}/>
+                                            <input type="hidden" name="name" value={name}/>
+                                        </div>
                                     </li>
                         )
                     }
